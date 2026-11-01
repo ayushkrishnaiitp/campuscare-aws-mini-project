@@ -1,0 +1,11 @@
+{
+  "name": "campuscare-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Campus issue reporting and service requests",
+  "main": "src/server.js",
+  "scripts": {"start":"node src/server.js", "dev":"node --watch src/server.js", "test":"node --test test/*.test.js", "test:smoke":"node scripts/smoke-test.js", "seed":"node src/seed.js"},
+  "engines": {"node":">=20"},
+  "dependencies": {"@aws-sdk/client-s3":"^3.850.0", "bcryptjs":"^2.4.3", "connect-pg-simple":"^10.0.0", "dotenv":"^16.4.7", "express":"^4.21.2", "express-rate-limit":"^7.5.0", "express-session":"^1.18.1", "helmet":"^8.1.0", "multer":"^2.0.1", "pg":"^8.16.3"},
+  "devDependencies": {}
+}

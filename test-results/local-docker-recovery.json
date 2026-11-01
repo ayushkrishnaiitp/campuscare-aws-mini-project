@@ -1,0 +1,20 @@
+{
+  "environment": "local Docker Compose; not an AWS deployment",
+  "measured_at_utc": "2026-11-01T06:57:15.344329+00:00",
+  "failure_injection": "SIGKILL to the Node server process inside the app container",
+  "recovery_signal": "Docker RestartCount increased, then /api/health returned HTTP 200 with {ok:true}",
+  "trials": [
+    1.378,
+    1.427,
+    1.616
+  ],
+  "restart_counts_after_trials": [
+    2,
+    3,
+    4
+  ],
+  "median_ttr_seconds": 1.427,
+  "max_ttr_seconds": 1.616,
+  "valid_local_ttr_measured": true,
+  "aws_ttr_measured": false
+}

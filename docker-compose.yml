@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: campuscare
+      POSTGRES_USER: campuscare
+      POSTGRES_PASSWORD: campuscare_dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U campuscare -d campuscare"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  app:
+    build: .
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://campuscare:campuscare_dev@db:5432/campuscare
+      SESSION_SECRET: ${SESSION_SECRET:-local-compose-only-change-this-secret}
+      UPLOAD_DRIVER: local
+      UPLOAD_DIR: /app/uploads
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+  seed:
+    build: .
+    command: ["npm", "run", "seed"]
+    environment:
+      DATABASE_URL: postgres://campuscare:campuscare_dev@db:5432/campuscare
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_started
+    profiles: ["seed"]
+volumes:
+  pgdata:
+  uploads:
